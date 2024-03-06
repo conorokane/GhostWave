@@ -29,16 +29,9 @@ function updateenemies()
 		e.hitcounter -= 1
 
 		if etype == 1 then
-			e.pos = v2lerp(e.pos, e.dest, 0.02)
-			if v2proximity(e.pos, e.dest, 3) then
-				e.waypointindex += 2
-				if e.waypointindex < #e.waypoints then
-					if (e.waypointindex > 3) shootsingle(e)
-					e.dest = v2make(e.waypoints[e.waypointindex], e.waypoints[e.waypointindex + 1])
-				else
-					del(enemies, e)
-				end
-			end
+			v2simulatefast(e)
+			if (e.life > 30) e.vel = v2rotate(e.vel, e.veer)
+			if (e.life > 300) del(enemies, e)
 		elseif etype == 2 then
 			-- tentacles
 			if e.spawning then
@@ -602,19 +595,16 @@ function spawngiblets(e)
 	add(enemysplats, newsplat)
 end
 
-function spawnpopcornenemies(bonus, count, _waypoints)
+function spawnpopcornenemies(bonus, count, startx, starty, startangle, _veer)
 	for i = 0, count - 1 do
 		local newenemy = {}
 		do
 			local _ENV = newenemy
-			type, bonuscountdown, hitpoints, hitcounter, size, score, waypoints, waypointindex, pos = 1, bonus, 2, 0, 5, 10, { _waypoints[1], _waypoints[2], _waypoints[3], _waypoints[4], _waypoints[5], _waypoints[6], _waypoints[7], _waypoints[8], _waypoints[9], _waypoints[10]}, 1, { x = _waypoints[1], y = _waypoints[2] - 10 * i }
+			type, bonuscountdown, hitpoints, hitcounter, size, score, pos, veer = 1, bonus, 2, 0, 5, 10, { x = startx, y = starty}, _veer
 		end
-
-		for j = 2, #newenemy.waypoints, 2 do
-			newenemy.waypoints[j] -= 6 * i -- offset each waypoint for subsequent enemies
-		end
-			
-		newenemy.dest = v2make(newenemy.waypoints[1], newenemy.waypoints[2])
+		newenemy.life = i * -16
+		newenemy.vel = v2scale({ x = cos(startangle), y = sin(startangle) }, 1.2)
+		newenemy.pos = v2add(newenemy.pos, v2scale(newenemy.vel, -16 * i))
 		add(enemies, newenemy)
 	end
 end
@@ -690,8 +680,7 @@ end
 function runschedule()
 	if scindex <= #schedule and time() - starttime + debugtime > schedule[scindex][1] then
 		if schedule[scindex][2] == 1 then
-			local waypointsarray = { schedule[scindex][5], schedule[scindex][6], schedule[scindex][7], schedule[scindex][8], schedule[scindex][9], schedule[scindex][10], schedule[scindex][11], schedule[scindex][12], schedule[scindex][13], schedule[scindex][14] }
-			spawnpopcornenemies(schedule[scindex][3], schedule[scindex][4], waypointsarray)
+			spawnpopcornenemies(schedule[scindex][3], schedule[scindex][4], schedule[scindex][5], schedule[scindex][6], schedule[scindex][7], schedule[scindex][8])
 		elseif schedule[scindex][2] == 2 then
 			spawnflappyenemies(schedule[scindex][3], schedule[scindex][4], schedule[scindex][5])
 		elseif schedule[scindex][2] == 3 then

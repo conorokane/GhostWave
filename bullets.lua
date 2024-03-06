@@ -40,7 +40,7 @@ function updatebullets()
 
 	for s in all(sparks) do
 		v2simulate(s)
-		if (s.life) == 15 del(sparks, s)
+		if (s.life == 15) del(sparks, s)
 	end
 
 	for r in all(playerrockets) do

@@ -41,6 +41,12 @@ function v2sub(v1, v2)
 	return v2make(v1.x - v2.x, v1.y - v2.y)
 end
 
+function v2rotate(v, angle)
+	local x2 = cos(angle) * v.x - sin(angle) * v.y
+	local y2 = sin(angle) * v.x + cos(angle) * v.y
+	return {x = x2, y = y2}
+end
+
 -- returns a random unit-length vector
 function v2randomnormalized()
 	local angle = rnd(1) -- pico-8 angles go from 0 to 1 (turns), starting at 3 o'clock going anti-clockwise

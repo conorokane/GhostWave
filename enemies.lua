@@ -31,7 +31,8 @@ function updateenemies()
 		if etype == 1 then
 			v2simulatefast(e)
 			if (e.life > 30) e.vel = v2rotate(e.vel, e.veer)
-			if (e.life > 300) del(enemies, e)
+			if (e.life == 85) shootsingle(e)
+			if (e.life == 300) del(enemies, e)
 		elseif etype == 2 then
 			-- tentacles
 			if e.spawning then

@@ -90,11 +90,11 @@ function drawmenu()
 		-- cursor
 		drawcursor(43 + menuselection * 8)
 
-		if (btnp(⬇️)) menuselection += 1 sfx(9)
-		if (btnp(⬆️)) menuselection -= 1 sfx(9)
+		if (btnp(⬇️)) menuselection += 1 sfx(16)
+		if (btnp(⬆️)) menuselection -= 1 sfx(15)
 		menuselection = menuselection % 4
 		if (not gameover and hasreleasebuttons) and (btnp(❎) or btnp(🅾️)) then
-			sfx(8) -- start game sound
+			sfx(17) -- start game sound
 				if menuselection == 0 then
 					initenemies()
 					initplayer()
@@ -121,7 +121,7 @@ function drawmenu()
 		drawcursor(114)
 		
 		if (not gameover) and (btnp(❎) or btnp(🅾️)) then
-			sfx(8) -- start game sound
+			sfx(17)
 			menupage, playertarget = 1, v2make(64, 100)
 		end
 	end

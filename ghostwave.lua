@@ -100,7 +100,7 @@ function drawmenu()
 					initplayer()
 					hasreleasebuttons = false
 					_update60, _draw = updategame, drawgame
-					if (musicon) music(0, nil, 3)
+					if (musicon) music(2, nil, 3)
 					playertarget, starttime = v2make(64, 100), time()
 				elseif menuselection == 1 then
 					menupage, playertarget = 2, v2make(22, 84)

@@ -31,7 +31,7 @@ function updateenemies()
 		if etype == 1 then
 			v2simulatefast(e)
 			if (e.life > 30) e.vel = v2rotate(e.vel, e.veer)
-			if (e.life == 85) shootsingle(e)
+			if (e.life == 85 and e.pos.y < 70) shootsingle(e)
 			if (e.life == 300) del(enemies, e)
 		elseif etype == 2 then
 			-- tentacles
@@ -384,24 +384,23 @@ end
 
 function shootsshotgun(enemy)
 	if (playerdying or gameover) return
-	if t % 240 == 0 or t % 240 == 40 then
+	if t % 240 == 0 then
 		enemy.shotcounter = 10
-		local directiontoplayer = v2sub(playerpos, enemy.pos)
-		local angletoplayer = atan2(directiontoplayer.x, directiontoplayer.y)
 		for i = 0, 5 do
-			local shotangle = rndrange(0.745, 0.755)
+			local shotangle = 0.7
+			if (i % 2 == 0) shotangle = 0.8
 			local shotvector = v2make(cos(shotangle), sin(shotangle))
-			shotvector = v2scale(shotvector, rndrange(1.8, 2.5))
+			shotvector = v2scale(shotvector, 1.2 + 0.1 * (i \ 2))
 			local newbullet = {
 				pos = enemy.pos,
 				vel = shotvector,
-				drag = 0.99,
-				color = 10,
+				drag = 0.995,
+				color = 8,
 				size = 2
 			}
 			add(enemybullets, newbullet)
-			sfx(9, 2)
 		end
+		sfx(9, 2)
 	end
 end
 
@@ -655,7 +654,7 @@ function spawntankenemy(bonus, _destx, _desty)
 	local newenemy = {}
 	do
 		local _ENV = newenemy
-		type, bonuscountdown, hitpoints, hitcounter, size, shotcounter, life, score = 4, bonus, 140, 0, 12, 0, 0, 400
+		type, bonuscountdown, hitpoints, hitcounter, size, shotcounter, life, score = 4, bonus, 250, 0, 12, 0, 0, 400
 	end
 	newenemy.randomoffset, newenemy.pos, newenemy.dest = rnd(1), v2make(64, -30), v2make(_destx, _desty)
 		

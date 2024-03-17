@@ -30,7 +30,7 @@ if (nobuttonspressed()) hasreleasebuttons = true -- prevent firing at the very s
 
 	-- === movement ===
 
-	local inputvector = v2make(0, 0)
+	inputvector = v2make(0, 0)
 	if (_update60 != updatemenu) then
 		if (btn(⬅️)) inputvector.x = -1 
 		if (btn(➡️)) inputvector.x = 1 
@@ -197,13 +197,12 @@ function drawplayer()
 	end
 
 	-- heli
-	local xoffset = playerpos.x - playertarget.x
 	if (playerinvulnerablecountdown > 0 and t % 6 > 2) -- flashes when invulnerable after respawn
 	or playerinvulnerablecountdown == 0 then 
-		if abs(xoffset) < 5 then -- not banking
+		if inputvector.x == 0 then -- not banking
 			spr(1, playerpos.x - playerhsize, playerpos.y - 6, 2, 2)
 			playerbanking = false
-		elseif xoffset > 5 then
+		elseif inputvector.x < 0 then
 			spr(8, playerpos.x - playerhsize, playerpos.y - 6, 2, 2)
 			playerbanking = true
 		else
@@ -229,7 +228,7 @@ function drawplayer()
 	if not playerbanking then
 		pset(playerpos.x - 3, playerpos.y + 8, 8)
 		pset(playerpos.x + 2, playerpos.y + 8, 11)
-	elseif xoffset > 0 then
+	elseif inputvector.x < 0 then
 		pset(playerpos.x + 2, playerpos.y + 8, 11)
 	else
 		pset(playerpos.x - 3, playerpos.y + 8, 8)

@@ -2,14 +2,22 @@
 -- by monorail
 
 function _init()
-	initmenu()
-	initgame()
+	highscore = 0>>>16
+	if not cartdata("ghostwave") then
+		dset(0, 0) -- set the high score to zero on first play
+	else
+		highscore = dget(0)
+	end
 	inertiaon, musicon = true, true
 	_update60, _draw, gameover = updatemenu, drawmenu, false
+	initmenu()
+	initgame()
 end
 
 function initmenu()
 	menupage, menuselection, logooffset = 1, 0, 128
+	if (musicon) music(20)
+	playertarget = v2make(64, 100)
 end
 
 function initgame()
@@ -43,7 +51,7 @@ function drawgame()
 	cls(0)
 	drawbackground()
 	drawlowervfx()
-	drawghosts()
+	if (not gameover) drawghosts()
 	drawenemies()
 	drawplayerbullets()
 	drawshellcases()
@@ -73,6 +81,9 @@ function drawmenu()
 	spr(224, 9 + logooffset, 6, 9, 2)
 	spr(233, 42 + logooffset, 21, 8, 2)
 	logooffset *= 0.88
+
+	-- highscore
+	printshadow("high score "..tostr(highscore, 0x2), 40, 120, 4)
 
 	if menupage == 1 then
 		printshadow("\14start", 11, 43, 4)
@@ -106,6 +117,11 @@ function drawmenu()
 					menupage, playertarget = 2, v2make(22, 84)
 				elseif menuselection == 2 then
 					musicon = not musicon
+					if musicon then
+						music(20)
+					else
+						music(-1)
+					end
 				else
 					inertiaon = not inertiaon
 				end
@@ -146,6 +162,7 @@ function updategameover()
 	if hasreleasebuttons and (btnp(🅾️) or btnp(❎)) then
 		sfx(8)
 		hasreleasedbuttons = false
+		initmenu()
 		_update60, _draw, enemies = updatemenu, drawmenu, {}
 	end
 end
@@ -155,16 +172,7 @@ function nobuttonspressed()
 end
 
 function drawgameover()
-	cls(0)
-	drawbackground()
-	drawlowervfx()
-	drawenemies()
-	drawplayerbullets()
-	drawshellcases()
-	drawuppervfx()
-	drawenemybullets()
-	drawsigns()
-	drawui()
+	drawgame()
 	if t % 60 > 10 then
 		if victory then
 			printshadow("\14victory!", 44, 50, 9)
@@ -172,10 +180,15 @@ function drawgameover()
 			printshadow("\14game over", 36, 50, 9)
 		end
 	end
+	if (newhighscore) printshadow("\14new high score!", 20, 59, 9)
 end
 
 function endgame()
 	music(-1)
 	sfx(26)
+	if score > highscore then
+		 highscore, newhighscore = score, true 
+		 dset(0, highscore)
+	end
 	_update60, _draw, gameover, hasreleasebuttons = updategameover, drawgameover, true, false
 end

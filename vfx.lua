@@ -60,7 +60,7 @@ function updatevfx()
 		if (splat.life > 10) then
 			del(enemysplats, splat)
 		else
-			splat.pos.y -= 1.5
+			splat.pos.y -= 4
 		end
 	end
 end
@@ -138,8 +138,10 @@ function drawuppervfx() -- visual effects that draw above the enemies
 		local splatcolor = 4
 		if (rnd(1) < 0.5) splatcolor = 11
 		local splatsize = min(rndrange(es.size * 4, es.size * 6), 15)
+		if (es.life > 7) fillp(░)
 		circfill(es.pos.x + rndrange(-3, 3), es.pos.y + rndrange(-3, 3), splatsize, splatcolor)
 	end
+	fillp()
 end
 
 function drawlowervfx() -- visual effects that draw below the enemies

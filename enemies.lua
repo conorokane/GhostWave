@@ -2,7 +2,7 @@ function initenemies()
 	enemies, ghosts, ghostcounter = {}, {}, 1
 	-- strip the trailing | from the string
 	scheduleraw = sub(scheduleraw, 1, #scheduleraw - 1)
-	schedule, scindex, debugtime = split2d(scheduleraw), 1, 0
+	schedule, scindex, debugtime = split2d(scheduleraw), 1, 180
 	if (debugtime > 0) then
 		for i = #schedule, 1, -1 do
 			if schedule[i][1] < debugtime then
@@ -567,7 +567,7 @@ function spawngiblets(e)
 	for i = 1, gibcount do
 		local newgib = {
 			pos = v2add(e.pos, v2scale(v2randomnormalized(), rndrange(2, 5))),
-			vel = v2scale(v2randominrange(20, 160), rndrange(1.5, 2)),
+			vel = v2scale(v2randominrange(40, 120), rndrange(1, 4)),
 			drag = 0.95,
 			force = v2make(rndrange(-0.01, 0.01), 0.03),
 			life = rndrange(-10, 10),
@@ -589,9 +589,9 @@ function spawngiblets(e)
 	local newsplat = {
 		pos = v2make(e.pos.x, e.pos.y), -- need to copy the values, not just pass the e.pos table
 		life = 0,
-		size = e.type
+		size = e.type * 2
 	}
-	if (etype == 3) newsplat.size = 2 
+	if (etype == 3) newsplat.size = 4 
 	add(enemysplats, newsplat)
 end
 

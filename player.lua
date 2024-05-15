@@ -1,5 +1,5 @@
 function initplayer()
-	playerspeed, playerhsize, playerbulletspeed, playercasespeed, playerrocketammo, playerrocketreloadcounter, playerfirerate, playerfirecounter, playerbanking, playerhudinertia, playerlives, playerdying, playerdeathcounter, playerinvulnerablecountdown, playervel, playerpos, playerbullets, playercases, playerguns, playerrockets = 1.4, 8, 8, 0.5, 3, 0, 4, -1, false, 0.2, 3, false, 0, 0, v2make(0, 0), v2make(64, 100), {}, {}, {}, {}
+	playerspeed, playerhsize, playerbulletspeed, playercasespeed, playerrocketammo, playerrocketreloadcounter, playerfirerate, playerfirecounter, playerbanking, playerhudinertia, playerlives, playerdying, playerdeathcounter, playerinvulnerablecountdown, playervel, playerpos, playerbullets, playercases, playerguns, playerrockets = 1.4, 8, 8, 0.5, 3, 700, 4, -1, false, 0.2, 3, false, 0, 0, v2make(0, 0), v2make(64, 100), {}, {}, {}, {}
 
 	playerhudpos, playerguns[1], playerguns[2], playerguns[3], playerguns[4], playertarget = v2make(playerpos.x, playerpos.y), { pos = v2make(-4, 4)}, { pos = v2make(5, 4)}, { pos = v2make(-2, 4)}, { pos = v2make(3, 4)}, v2make(64, 100)
 
@@ -9,7 +9,7 @@ function initplayer()
 		playerinertia = 1
 	end
 
-	victory, score = false, 0
+	victory, score, newhighscore = false, 0, false
 end
 
 function updateplayer()
@@ -115,7 +115,7 @@ if (nobuttonspressed()) hasreleasebuttons = true -- prevent firing at the very s
 		playerrocketreloadcounter += 1
 		if playerrocketreloadcounter == 600 and playerrocketammo == 0 then
 			playerrocketammo = 3
-			sfx(4)
+			sfx(4, 1) -- temporarily override music channel
 		end
 	end
 end
@@ -167,30 +167,30 @@ function drawplayer()
 			
 			-- rocket ammo
 			print("RKT", playerhudpos.x + 4, playerhudpos.y + 5, 11)
+
+			if playerrocketammo > 0 or t % 30 > 15 then
+				pset(playerhudpos.x + 4, playerhudpos.y + 4, 4)
+				pset(playerhudpos.x + 8, playerhudpos.y + 4, 4)
+				pset(playerhudpos.x + 12, playerhudpos.y + 4, 4)
+			end
 			
 			if playerrocketammo > 0 then
 				rectfill(playerhudpos.x + 4, playerhudpos.y + 2, playerhudpos.x + 6, playerhudpos.y + 4, 4)
-			else
-				if t % 30 > 15 then
-					pset(playerhudpos.x + 4, playerhudpos.y + 4, 4)
-				end
 			end
 			if playerrocketammo > 1 then
 				rectfill(playerhudpos.x + 8, playerhudpos.y + 2, playerhudpos.x + 10, playerhudpos.y + 4, 4)
-			else
-				if playerrocketammo != 0 then
-					pset(playerhudpos.x + 8, playerhudpos.y + 4, 4)
-				elseif t % 30 > 15 then
-					pset(playerhudpos.x + 8, playerhudpos.y + 4, 4)
-				end
 			end
 			if playerrocketammo > 2 then
 				rectfill(playerhudpos.x + 12, playerhudpos.y + 2, playerhudpos.x + 14, playerhudpos.y + 4, 4)
-			else
-				if playerrocketammo != 0 then
-					pset(playerhudpos.x + 12, playerhudpos.y + 4, 4)
-				elseif t % 30 > 15 then
-					pset(playerhudpos.x + 12, playerhudpos.y + 4, 4)
+			end
+		end
+
+		if _update60 != updatemenu then
+			if playerrocketreloadcounter > 600 and playerrocketreloadcounter < 630 then
+				print("RELOAD", playerhudpos.x - 11, playerhudpos.y - 19, 4)
+				if playerrocketreloadcounter < 620 then
+					line(0, playerhudpos.y - 17, playerhudpos.x - 15, playerhudpos.y - 17, 4)
+					line(128, playerhudpos.y - 17, playerhudpos.x + 15, playerhudpos.y - 17, 4)
 				end
 			end
 		end
@@ -243,7 +243,7 @@ end
 function loselife()
 	if (playerinvulnerablecountdown > 0 or playerdying) return
 	playerlives -= 1
-	sfx(12)
+	sfx(12, 1)
 	local exp = { pos = v2make(playerpos.x, playerpos.y), life = 0 }
 	add(rocketexplosions, exp)
 	-- wipe bullets

@@ -1,13 +1,7 @@
 function drawui()
 	local scorestring = tostr(score, 0x2)
-	print("\14score "..scorestring, 3, 2, 3)
-	print("\14score "..scorestring, 2, 2, 7)
-
-	for i = 0, 2 do
-		local sprite = 26
-		if (playerlives > i) sprite = 23
-		spr(sprite, 119 - i * 8, 2)
-	end
+	printshadow("\14score "..scorestring, 2, 2, 7)
+	printshadow("\14lives "..playerlives, 87, 2, 7)
 
 	for p in all(deathpoints) do
 		local pcolor = p.color
@@ -21,8 +15,7 @@ function drawui()
 		local scorestring = p.value
 		if (p.color == 14) scorestring = "\14"..scorestring -- bigger font for blue scores
 
-		print(scorestring, p.x + 1, p.y, 3)
-		print(scorestring, p.x, p.y, pcolor)
+		printshadow(scorestring, p.x, p.y, pcolor)
 		if (p.life < 20) p.y -= (20 - p.life) * 0.03
 		if (p.life > 40) del(deathpoints, p)
 		p.life += 1

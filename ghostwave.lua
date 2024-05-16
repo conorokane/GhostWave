@@ -127,7 +127,7 @@ function drawmenu()
 				end
 		end
 	elseif menupage == 2 then
-		printshadow("🅾️ : shoot gun\n❎ : shoot rockets\n\nafter 3 salvos, rockets take\n10 seconds to reload", 10, 40, 4)
+		printshadow("🅾️ : shoot gun\n❎ : shoot rockets\n\nafter 3 shots, rockets take\n10 seconds to reload", 10, 40, 4)
 		printshadow("rocket ammo is\nindicated here\n\npickup enemy ghosts\nfor a score bonus", 52, 79, 4)
 		line(38, 87, 50, 87, 4)
 

@@ -2,7 +2,7 @@ function initenemies()
 	enemies, ghosts, ghostcounter = {}, {}, 1
 	-- strip the trailing | from the string
 	scheduleraw = sub(scheduleraw, 1, #scheduleraw - 1)
-	schedule, scindex, debugtime = split2d(scheduleraw), 1, 180
+	schedule, scindex, debugtime = split2d(scheduleraw), 1, 0
 	if (debugtime > 0) then
 		for i = #schedule, 1, -1 do
 			if schedule[i][1] < debugtime then

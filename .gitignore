@@ -1,2 +1,4 @@
-﻿*.jpg
-*.ods#
+﻿/concepts
+/ghostwave_html
+/ghostwave.bin
+/itch assets

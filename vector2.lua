@@ -8,7 +8,7 @@ end
 
 v2zero, v2up, v2down, v2left, v2right = v2make(0, 0), v2make(0, -1), v2make(0, 1), v2make(-1, 0), v2make(1, 0)
 -- don't assign variables to be equal to these vectors, that will link them both ways!
--- a = v2zero is the same as v2zero = a
+-- a = v2zero means that v2zero will change when a changes
 -- only use these for comparison
 
 function v2length(v)
@@ -79,7 +79,7 @@ function v2lerp(v1, v2, t)
 end
 
 -- simulate a particle
--- requires a particle p = { life = 0, pos = v2zero, vel = v2zero, drag = 1 (no drag), force = v2zero (optional) }
+-- requires a particle p = { life = 0 (optional), pos = v2zero, vel = v2zero, drag = 1 (no drag), force = v2zero (optional) }
 function v2simulate(p)
 	if p.force then
 		p.vel = v2scale(v2add(p.vel, p.force), p.drag)
